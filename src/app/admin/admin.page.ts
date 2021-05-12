@@ -27,6 +27,9 @@ export class AdminPage implements OnInit {
   instructionsPage(){
     this.router.navigate(['instructions'])
   }
+  chatPage(){
+    this.router.navigate(['chat'])
+  }
 
   ngOnInit() {
   }

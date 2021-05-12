@@ -47,6 +47,10 @@ const routes: Routes = [
     path: 'individually',
     loadChildren: () => import('./individually/individually.module').then( m => m.IndividuallyPageModule)
   },
+  {
+    path: 'chat',
+    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
+  },
 
 
 
