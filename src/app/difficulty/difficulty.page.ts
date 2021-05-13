@@ -9,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DifficultyPage implements OnInit {
 
-  //listRooms = [];
+  roomList = [];
+  usersList = [];
+  selectedRoom;
+  selectedUser;
 
   constructor(private router: Router, private creater: RoomService) { }
+
+
+  
+  async ngOnInit() {
+    this.getSalas();
+    await this.getUsuarios()
+  }
 
   backPage(){
     this.router.navigate(['admin'])
@@ -27,13 +37,26 @@ export class DifficultyPage implements OnInit {
 
   crearSala(){
     this.creater.createRoom()
+    this.getSalas();
+
   }
 
-  getSalas(){
-    //lsita = this.creater.
+  async getSalas(){
+     this.creater.getRoom().then(res => {
+       this.roomList = res; 
+     }) 
   }
 
-  ngOnInit() {
+  async getUsuarios(){
+    this.creater.getUsers().then( users => {
+      this.usersList = users
+      
+    });
   }
+
+  agregarJugador(){
+    this.creater.addUserToRoom( this.selectedRoom,this.selectedUser );
+  }
+
 
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore';
+import * as firebase from 'firebase'
 
 @Injectable({
   providedIn: 'root'
@@ -7,42 +8,59 @@ import * as firebase from 'firebase';
 export class RoomService {
 
 
-  constructor(  ) {  }
+  constructor( private afs : AngularFirestore ) { }
 
-  createRoom(){
-    var db = firebase.firestore();
+  createRoom() {
     var user = JSON.parse(localStorage.getItem('userInformation'));
-    db.collection('rooms').add({
-      owner: { 
+    this.afs.collection('rooms').add({
+      owner: {
         owner: user.uid,
         name: user.displayName
       },
       players: [
-        {playerId: user.uid, playerName: user.displayName}
+        { playerId: user.uid, playerName: user.displayName }
       ]
-    }).then(res =>{
+    }).then(res => {
       console.log(res);
-    }).catch(ruta =>{
+    }).catch(ruta => {
       console.log(ruta);
     });
   }
 
-  // getSalas(){
-  //   var db = firebase.firestore();
 
-  //   var docRef = db.collection("users").get("uid");
+  async getRoom() {
 
-  //   docRef.get("displayName").then((doc) => {
-  //       if (doc.exists) {
-  //           console.log("Document data:", doc.data());
-  //       } else {
-  //           // doc.data() will be undefined in this case
-  //           console.log("No such document!");
-  //       }
-  //   }).catch((error) => {
-  //       console.log("Error getting document:", error);
-  //   });
-    
-  // }
+    var roomGames = [];
+
+    await this.afs.collection('rooms').get()
+      .subscribe( snapshot => {
+        snapshot.forEach(doc => {
+          roomGames.push( doc.id )
+        });
+      });
+
+    return roomGames;
+  }
+
+  async getUsers() {
+
+    var usersGames = [];
+
+    await this.afs.collection('users').get()
+      .subscribe( snapshot => {
+        snapshot.forEach(doc => {
+          usersGames.push( doc.data() )
+        });
+      });
+
+    return usersGames;
+  }
+
+  async addUserToRoom( idRoom, user ){
+    await this.afs.collection('rooms').doc( idRoom ).update({
+      players: firebase.firestore.FieldValue.arrayUnion({ user })
+    })
+  }
+
 }
 
