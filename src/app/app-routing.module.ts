@@ -51,6 +51,10 @@ const routes: Routes = [
     path: 'chat',
     loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
   },
+  {
+    path: 'multi-player',
+    loadChildren: () => import('./multi-player/multi-player.module').then( m => m.MultiPlayerPageModule)
+  },
 
 
 

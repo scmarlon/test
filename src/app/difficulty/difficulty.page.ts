@@ -1,3 +1,4 @@
+import { RoomService } from './../services/room.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DifficultyPage implements OnInit {
 
-  constructor(private router: Router) { }
+  //listRooms = [];
+
+  constructor(private router: Router, private creater: RoomService) { }
 
   backPage(){
     this.router.navigate(['admin'])
@@ -16,6 +19,18 @@ export class DifficultyPage implements OnInit {
   
   jugarPage(){
     this.router.navigate(['individually'])
+  }
+
+  invitarPage(){
+    this.router.navigate(['multi-player'])
+  }
+
+  crearSala(){
+    this.creater.createRoom()
+  }
+
+  getSalas(){
+    //lsita = this.creater.
   }
 
   ngOnInit() {

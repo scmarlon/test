@@ -7,12 +7,15 @@ import { Router } from '@angular/router';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
+
+
 export class LoginPage {
   constructor(private authSvc: AuthService, private router: Router) {}
 
   async onLogin(email, password) {
     try {
       const user = await this.authSvc.login(email.value, password.value);
+      
       if (user) {
         const isVerified = this.authSvc.isEmailVerified(user);
         this.redirectUser(isVerified);
@@ -23,8 +26,18 @@ export class LoginPage {
   }
 
   async onLoginGoogle() {
+    
     try {
       const user = await this.authSvc.loginGoogle();
+
+      const loginInformation = {
+        uid: user.uid,
+        displayName:user.displayName,
+        userEmail: user.email
+      }
+
+      localStorage.setItem('userInformation', JSON.stringify( loginInformation ))
+
       if (user) {
         const isVerified = this.authSvc.isEmailVerified(user);
         this.redirectUser(isVerified);
